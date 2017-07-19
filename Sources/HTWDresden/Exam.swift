@@ -50,3 +50,33 @@ public struct Exam: Codable {
         self.rooms = try container.decode([String].self, forKey: .rooms)
     }
 }
+
+extension Exam: APIResource {
+    static var url: URL {
+        return URL(string: "https://www2.htw-dresden.de/~app/API/GetExams.php")!
+    }
+
+    internal static func get(with params: [String: String], session: URLSession, completion: @escaping (Result<[Exam]>) -> Void) {
+        let url = URL(string: "?\(params.urlEncoded)", relativeTo: self.url)!
+        let request = URLRequest(url: url)
+        Network.dataTask(request: request, session: session, completion: completion)
+    }
+
+    public static func forStudent(year: Int, courseID: Int, degree: Degree, session: URLSession = .shared, completion: @escaping (Result<[Exam]>) -> Void) {
+        let params = [
+            "StgJhr": String(year),
+            "Stg": String(courseID),
+            "AbSc": degree.rawValue
+        ]
+        self.get(with: params, session: session, completion: completion)
+    }
+
+    public static func forStudygroup(with studygroup: Studygroup, session: URLSession = .shared, completion: @escaping (Result<[Exam]>) -> Void) {
+        self.forStudent(year: studygroup.year, courseID: studygroup.courseID, degree: studygroup.degree, completion: completion)
+    }
+
+    public static func forProfessor(with id: String, session: URLSession = .shared, completion: @escaping (Result<[Exam]>) -> Void) {
+        let params = ["Prof": id]
+        self.get(with: params, session: session, completion: completion)
+    }
+}
