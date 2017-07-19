@@ -101,19 +101,40 @@ extension Grade.Status: CustomStringConvertible {
 
 extension Grade {
     public enum Annotation: String, Codable {
-        case accreddited = "a" // anerkannt
-        case sick = "k" // krank
-        case signedOut = "e" // abgemeldet
-        case blocked = "g" // gesperrt
-        case notPermitted = "nz" // nicht zugelassen
-        case unexcusedAbsence = "5ue" // unentschuldigt gefehlt
-        case notReported = "5na" // nicht angetreten - Fristüberschreitung
-        case noSecondAttemptApplication = "kA" // kein Antrag 2. Wiederholungsprüfung gestellt
-        case freeAtempt = "PFV" // Freiversuch
-        case withSuccess = "mE" // mit Erfolg
-        case failed = "N" // nicht bestanden
-        case openPracticalCourse = "VPo" // Vorpraktikum offen
-        case noShowOptionalAppointment = "f" // freiwilliger Termin nicht wahrgenommen
-        case withReservation = "uV" // unter Vorbehalt
+        case accreddited = "a"
+        case sick = "k"
+        case signedOut = "e"
+        case blocked = "g"
+        case notPermitted = "nz"
+        case unexcusedAbsence = "5ue"
+        case notReported = "5na"
+        case noSecondAttemptApplication = "kA"
+        case freeAtempt = "PFV"
+        case withSuccess = "mE"
+        case failed = "N"
+        case openPracticalCourse = "VPo"
+        case noShowOptionalAppointment = "f"
+        case withReservation = "uV"
+    }
+}
+
+extension Grade.Annotation: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .accreddited: return "anerkannt"
+        case .sick: return "krank"
+        case .signedOut: return "abgemeldet"
+        case .blocked: return "gesperrt"
+        case .notPermitted: return "nicht zugelassen"
+        case .unexcusedAbsence: return "unentschuldigt gefehlt"
+        case .notReported: return "nicht angetreten - Fristüberschreitung"
+        case .noSecondAttemptApplication: return "kein Antrag 2. Wiederholungsprüfung gestellt"
+        case .freeAtempt: return "Freiversuch"
+        case .withSuccess: return "mit Erfolg"
+        case .failed: return "nicht bestanden"
+        case .openPracticalCourse: return "Vorpraktikum offen"
+        case .noShowOptionalAppointment: return "freiwilliger Termin nicht wahrgenommen"
+        case .withReservation: return "unter Vorbehalt"
+        }
     }
 }
