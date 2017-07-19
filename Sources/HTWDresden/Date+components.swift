@@ -23,6 +23,14 @@ extension Date {
         self = date
     }
 
+    init?(withShortISO isoString: String) {
+        let components = isoString.components(splitBy: "-")
+        guard components.count == 3 else { return nil }
+        let (year, month, day) = (components[0], components[1], components[2])
+        guard let date = Calendar.current.date(from: DateComponents(year: year, month: month, day: day)) else { return nil }
+        self = date
+    }
+
     static var currentYear: Int {
         let calendar = Calendar.current
         return calendar.component(.year, from: Date())
