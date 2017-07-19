@@ -40,4 +40,8 @@ class GradeTests: XCTestCase {
         XCTAssertEqual(grades[0].status, .passed)
         XCTAssertEqual(grades[1].grade, 130)
     }
+
+    static var allTests = [
+        ("testDeserialization", testDeserialization)
+    ]
 }
