@@ -106,3 +106,9 @@ extension Lesson {
         }
     }
 }
+
+extension Lesson.Time: CustomStringConvertible {
+    public var description: String {
+        return "\(self.hour):\(self.minute)"
+    }
+}
