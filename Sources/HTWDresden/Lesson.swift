@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Lesson: Codable {
+public struct Lesson: Decodable {
     public let tag: String
     public let name: String
     public let kind: Kind
@@ -53,7 +53,7 @@ public struct Lesson: Codable {
 
 extension Lesson {
     // TODO: there's probably more cases here...
-    public enum Kind: String, Codable {
+    public enum Kind: String, Decodable {
         case lecture = "V"
         case tutorium = "Ü"
         case practicalCourse = "Pr"
@@ -70,14 +70,6 @@ extension Lesson {
             print("Found unknown Lesson.Kind: '\(value)'")
             print("Please add this to the enum here -> https://github.com/kiliankoe/HTWDresden/blob/master/Sources/HTWDresden/Lesson.swift")
             self = .other
-        }
-
-        public func encode(to encoder: Encoder) throws {
-            var container = encoder.singleValueContainer()
-            guard self != .other else {
-                throw EncodingError.invalidValue(Kind.other, EncodingError.Context(codingPath: [nil], debugDescription: "Lesson.Kind.other is not a valid value to serialize"))
-            }
-            try container.encode(self.rawValue)
         }
     }
 
