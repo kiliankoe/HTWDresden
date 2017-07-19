@@ -138,3 +138,21 @@ extension Grade.Annotation: CustomStringConvertible {
         }
     }
 }
+
+extension Grade: APIResource {
+    static var url: URL {
+        return URL(string: "https://wwwqis.htw-dresden.de/appservice/getgrades")!
+    }
+
+    public static func get(for login: Login, degreeNumber: String, courseNumber: String, regulationVersion: String, session: URLSession = .shared, completion: @escaping (Result<[Grade]>) -> Void) {
+        var request = URLRequest(url: self.url)
+        request.httpMethod = "POST"
+        let body = ["sNummer": login.sNumber, "RZLogin": login.password, "AbschlNr": degreeNumber, "StgNr": courseNumber, "POVersion": regulationVersion]
+        request.httpBody = body.urlEncoded.data(using: .utf8)
+        Network.dataTask(request: request, session: session, completion: completion)
+    }
+
+    public static func get(for login: Login, course: Course, session: URLSession = .shared, completion: @escaping (Result<[Grade]>) -> Void) {
+        self.get(for: login, degreeNumber: course.degreeNumber, courseNumber: course.number, regulationVersion: course.regulationVersion, session: session, completion: completion)
+    }
+}

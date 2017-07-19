@@ -14,4 +14,18 @@ public struct Course: Codable {
         case number = "StgNr"
         case note = "StgTxt"
     }
+
+    public static func get(for login: Login, session: URLSession = .shared, completion: @escaping (Result<[Course]>) -> Void) {
+        var request = URLRequest(url: self.url)
+        request.httpMethod = "POST"
+        let body = ["sNummer": login.sNumber, "RZLogin": login.password]
+        request.httpBody = body.urlEncoded.data(using: .utf8)
+        Network.dataTask(request: request, session: session, completion: completion)
+    }
+}
+
+extension Course: APIResource {
+    static var url: URL {
+        return URL(string: "https://wwwqis.htw-dresden.de/appservice/getcourses")!
+    }
 }
