@@ -1,35 +1,30 @@
 import Foundation
 
 extension Date {
-    init?(withDayString dayString: String, andTimeString timeString: String) {
-        guard let date = Date(withDayString: dayString) else { return nil }
-
-        let timeStringComponents = timeString.components(splitBy: ":")
-        guard timeStringComponents.count == 2 else { return nil }
-        let (hour, minute) = (timeStringComponents[0], timeStringComponents[1])
-
-        self = date + TimeInterval(((hour * 60) + minute) * 60)
-    }
-
     init?(withDayString dayString: String) {
         let components = dayString.components(splitBy: ".")
         guard components.count >= 2 else { return nil }
         let (day, month) = (components[0], components[1])
-        let year: Int
-        if components.count == 3 {
-            year = components[2]
-        } else {
-            year = Calendar.current.component(.year, from: Date())
-        }
-        guard let date = Calendar.current.date(from: DateComponents(year: year, month: month, day: day)) else { return nil }
+        let year = components.count == 3 ? components[2] : Calendar(identifier: .gregorian).component(.year, from: Date())
+        guard let date = Calendar(identifier: .gregorian).date(from: DateComponents(year: year, month: month, day: day)) else { return nil }
         self = date
+    }
+
+    init?(withDayString dayString: String, andTimeString timeString: String) {
+        guard let date = Date(withDayString: dayString) else { return nil }
+
+        let timeStringComponents = timeString.components(splitBy: ":")
+        guard timeStringComponents.count >= 2 else { return nil }
+        let (hour, minute) = (timeStringComponents[0], timeStringComponents[1])
+        let second = timeStringComponents.count == 3 ? timeStringComponents[2] : 0
+        self = date + TimeInterval(((hour * 60) + minute) * 60 + second)
     }
 
     init?(withShortISO isoString: String) {
         let components = isoString.components(splitBy: "-")
         guard components.count == 3 else { return nil }
         let (year, month, day) = (components[0], components[1], components[2])
-        guard let date = Calendar.current.date(from: DateComponents(year: year, month: month, day: day)) else { return nil }
+        guard let date = Calendar(identifier: .gregorian).date(from: DateComponents(year: year, month: month, day: day)) else { return nil }
         self = date
     }
 
@@ -37,8 +32,8 @@ extension Date {
         let timeStringComponents = timeString.components(splitBy: ":")
         guard timeStringComponents.count == 2 else { return nil }
         let (hour, minute) = (timeStringComponents[0], timeStringComponents[1])
-        let selfComponents = Calendar.current.dateComponents([.year, .month, .day], from: self)
-        let date = Calendar.current.date(from: DateComponents(year: selfComponents.year, month: selfComponents.month, day: selfComponents.day, hour: hour, minute: minute))
+        let selfComponents = Calendar(identifier: .gregorian).dateComponents([.year, .month, .day], from: self)
+        let date = Calendar(identifier: .gregorian).date(from: DateComponents(year: selfComponents.year, month: selfComponents.month, day: selfComponents.day, hour: hour, minute: minute))
         return date?.timeIntervalSince(self)
     }
 }
