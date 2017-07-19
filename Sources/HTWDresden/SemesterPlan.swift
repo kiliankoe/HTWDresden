@@ -8,6 +8,16 @@ public struct SemesterPlan: Decodable {
     let lecturePeriod: Period
     let examPeriod: Period
     let reregistration: Period
+
+    private enum CodingKeys: String, CodingKey {
+        case year
+        case kind = "type"
+        case period
+        case freeDays
+        case lecturePeriod
+        case examPeriod = "examsPeriod"
+        case reregistration
+    }
 }
 
 extension SemesterPlan {
