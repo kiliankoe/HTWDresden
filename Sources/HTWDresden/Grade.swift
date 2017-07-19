@@ -64,8 +64,18 @@ public struct Grade: Decodable {
             self.publishDate = nil
         }
         self.kind = try container.decode(String.self, forKey: .kind)
-        self.annotation = try container.decodeIfPresent(Annotation.self, forKey: .annotation)
-        self.ectsGrade = try container.decodeIfPresent(String.self, forKey: .ectsGrade)
+        let rawAnnotation = try container.decodeIfPresent(String.self, forKey: .annotation)
+        if let rawAnnotation = rawAnnotation, rawAnnotation != "" {
+            self.annotation = Annotation(rawValue: rawAnnotation)
+        } else {
+            self.annotation = nil
+        }
+        let rawEctsGrade = try container.decodeIfPresent(String.self, forKey: .ectsGrade)
+        if let rawEctsGrade = rawEctsGrade, rawEctsGrade != "" {
+            self.ectsGrade = rawEctsGrade
+        } else {
+            self.ectsGrade = nil
+        }
     }
 }
 
