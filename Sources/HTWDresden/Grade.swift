@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Grade: Codable {
+public struct Grade: Decodable {
     public let number: String
     public let status: Status?
     public let ectsCredits: Double
@@ -8,7 +8,7 @@ public struct Grade: Codable {
     public let semester: Semester?
     public let tryCount: Int
     public let date: Date?
-    public let grade: Double // would it make sense to keep the grade in some other internal representation?
+    public let grade: Int? // would it make sense to keep the grade in some other internal representation?
     public let publishDate: Date?
     public let kind: String // this would make sense as an enum as well, I've seen 'G', 'S', 'U', 'AP'
     public let annotation: Annotation?
@@ -27,6 +27,45 @@ public struct Grade: Codable {
         case kind = "PrForm"
         case annotation = "Vermerk"
         case ectsGrade = "EctsGrade"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.number = try container.decode(String.self, forKey: .number)
+        self.status = try container.decodeIfPresent(Status.self, forKey: .status)
+        let rawEctsCredits = try container.decode(String.self, forKey: .ectsCredits)
+        guard let ectsCredits = Double(rawEctsCredits) else {
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: [CodingKeys.ectsCredits], debugDescription: "Did not find expected double string value"))
+        }
+        self.ectsCredits = ectsCredits
+        self.note = try container.decode(String.self, forKey: .note)
+        self.semester = try container.decodeIfPresent(Semester.self, forKey: .semester)
+        let rawTryCount = try container.decode(String.self, forKey: .tryCount)
+        guard let tryCount = Int(rawTryCount) else {
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: [CodingKeys.tryCount], debugDescription: "Did not find expected int string value"))
+        }
+        self.tryCount = tryCount
+        let rawDate = try container.decodeIfPresent(String.self, forKey: .date)
+        if let rawDate = rawDate {
+            self.date = Date(withDayString: rawDate)
+        } else {
+            self.date = nil
+        }
+        let rawGrade = try container.decodeIfPresent(String.self, forKey: .grade)
+        if let rawGrade = rawGrade {
+            self.grade = Int(rawGrade)
+        } else {
+            self.grade = nil
+        }
+        let rawPublishDate = try container.decodeIfPresent(String.self, forKey: .publishDate)
+        if let rawPublishDate = rawPublishDate {
+            self.publishDate = Date(withDayString: rawPublishDate)
+        } else {
+            self.publishDate = nil
+        }
+        self.kind = try container.decode(String.self, forKey: .kind)
+        self.annotation = try container.decodeIfPresent(Annotation.self, forKey: .annotation)
+        self.ectsGrade = try container.decodeIfPresent(String.self, forKey: .ectsGrade)
     }
 }
 

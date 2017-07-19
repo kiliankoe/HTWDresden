@@ -2,24 +2,26 @@ import Foundation
 
 extension Date {
     init?(withDayString dayString: String, andTimeString timeString: String) {
-        let dayStringComponents = dayString.components(splitBy: ".")
-        guard dayStringComponents.count > 1 else { return nil }
+        guard let date = Date(withDayString: dayString) else { return nil }
 
         let timeStringComponents = timeString.components(splitBy: ":")
         guard timeStringComponents.count == 2 else { return nil }
-
-        let (day, month) = (dayStringComponents[0], dayStringComponents[1])
         let (hour, minute) = (timeStringComponents[0], timeStringComponents[1])
 
+        self = date + TimeInterval(((hour * 60) + minute) * 60)
+    }
+
+    init?(withDayString dayString: String) {
+        let components = dayString.components(splitBy: ".")
+        guard components.count >= 2 else { return nil }
+        let (day, month) = (components[0], components[1])
         let year: Int
-        if dayStringComponents.count == 3 {
-            year = dayStringComponents[2]
+        if components.count == 3 {
+            year = components[2]
         } else {
             year = Date.currentYear
         }
-
-        let components = DateComponents(year: year, month: month, day: day, hour: hour, minute: minute)
-        guard let date = Calendar.current.date(from: components) else { return nil }
+        guard let date = Calendar.current.date(from: DateComponents(year: year, month: month, day: day)) else { return nil }
         self = date
     }
 
@@ -32,8 +34,7 @@ extension Date {
     }
 
     static var currentYear: Int {
-        let calendar = Calendar.current
-        return calendar.component(.year, from: Date())
+        return Calendar.current.component(.year, from: Date())
     }
 
     func distance(toTimeString timeString: String) -> TimeInterval? {
