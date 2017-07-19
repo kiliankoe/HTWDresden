@@ -7,7 +7,7 @@ public struct Exam: Codable {
     public let day: String
     public let startTime: String
     public let endTime: String
-    public let examiner: [String]
+    public let examiners: [String]
     public let nextChance: String
     public let rooms: [String]
 
@@ -29,7 +29,7 @@ public struct Exam: Codable {
         case day = "Day"
         case startTime = "StartTime"
         case endTime = "EndTime"
-        case examiner = "Examiner"
+        case examiners = "Examiner"
         case nextChance = "NextChance"
         case rooms = "Rooms"
     }
@@ -42,7 +42,7 @@ public struct Exam: Codable {
         self.day = try container.decode(String.self, forKey: .day)
         self.startTime = try container.decode(String.self, forKey: .startTime)
         self.endTime = try container.decode(String.self, forKey: .endTime)
-        self.examiner = try container.decode(String.self, forKey: .examiner)
+        self.examiners = try container.decode(String.self, forKey: .examiners)
             .split(separator: "/")
             .map(String.init)
             .map { $0.trimmingCharacters(in: .whitespaces) }
