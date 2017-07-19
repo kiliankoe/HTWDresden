@@ -1,6 +1,6 @@
 import Foundation
 
-public struct SemesterPlan: Codable {
+public struct SemesterPlan: Decodable {
     let year: Int
     let kind: Kind
     let period: Period
@@ -16,7 +16,7 @@ extension SemesterPlan {
         case summer = "S"
     }
 
-    public struct Period: Codable {
+    public struct Period: Decodable {
         public let begin: Date
         public let end: Date
 
@@ -40,7 +40,7 @@ extension SemesterPlan {
         }
     }
 
-    public struct Holiday: Codable {
+    public struct Holiday: Decodable {
         public let name: String
         public let begin: Date
         public let end: Date
