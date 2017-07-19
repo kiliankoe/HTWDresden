@@ -19,7 +19,7 @@ extension Date {
         if components.count == 3 {
             year = components[2]
         } else {
-            year = Date.currentYear
+            year = Calendar.current.component(.year, from: Date())
         }
         guard let date = Calendar.current.date(from: DateComponents(year: year, month: month, day: day)) else { return nil }
         self = date
@@ -31,10 +31,6 @@ extension Date {
         let (year, month, day) = (components[0], components[1], components[2])
         guard let date = Calendar.current.date(from: DateComponents(year: year, month: month, day: day)) else { return nil }
         self = date
-    }
-
-    static var currentYear: Int {
-        return Calendar.current.component(.year, from: Date())
     }
 
     func distance(toTimeString timeString: String) -> TimeInterval? {
