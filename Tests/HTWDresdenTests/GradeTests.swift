@@ -37,6 +37,7 @@ class GradeTests: XCTestCase {
         """.data(using: .utf8)!
 
         let grades = try! JSONDecoder().decode([Grade].self, from: json)
+        XCTAssertEqual(grades[0].examName, "Informatik 1")
         XCTAssertEqual(grades[0].status, .passed)
         XCTAssertEqual(grades[1].grade, 130)
     }

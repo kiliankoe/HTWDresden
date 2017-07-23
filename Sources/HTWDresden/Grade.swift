@@ -4,7 +4,7 @@ public struct Grade: Decodable {
     public let identifier: String
     public let status: Status?
     public let ectsCredits: Double
-    public let name: String
+    public let examName: String
     public let semester: Semester?
     public let tryCount: Int
     public let date: Date?
@@ -18,7 +18,7 @@ public struct Grade: Decodable {
         case identifier = "PrNr"
         case status = "Status"
         case ectsCredits = "EctsCredits"
-        case name = "PrTxt"
+        case examName = "PrTxt"
         case semester = "Semester"
         case tryCount = "Versuch"
         case date = "PrDatum"
@@ -38,7 +38,7 @@ public struct Grade: Decodable {
             throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: [CodingKeys.ectsCredits], debugDescription: "Did not find expected double string value"))
         }
         self.ectsCredits = ectsCredits
-        self.name = try container.decode(String.self, forKey: .name)
+        self.examName = try container.decode(String.self, forKey: .examName)
         self.semester = try container.decodeIfPresent(Semester.self, forKey: .semester)
         let rawTryCount = try container.decode(String.self, forKey: .tryCount)
         guard let tryCount = Int(rawTryCount) else {
