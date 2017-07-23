@@ -1,10 +1,10 @@
 import Foundation
 
 public struct Grade: Decodable {
-    public let number: String
+    public let identifier: String
     public let status: Status?
     public let ectsCredits: Double
-    public let note: String
+    public let name: String
     public let semester: Semester?
     public let tryCount: Int
     public let date: Date?
@@ -15,10 +15,10 @@ public struct Grade: Decodable {
     public let ectsGrade: String? // what is this actually? and what type? Double probably?
 
     private enum CodingKeys: String, CodingKey {
-        case number = "PrNr"
+        case identifier = "PrNr"
         case status = "Status"
         case ectsCredits = "EctsCredits"
-        case note = "PrTxt"
+        case name = "PrTxt"
         case semester = "Semester"
         case tryCount = "Versuch"
         case date = "PrDatum"
@@ -31,14 +31,14 @@ public struct Grade: Decodable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.number = try container.decode(String.self, forKey: .number)
+        self.identifier = try container.decode(String.self, forKey: .identifier)
         self.status = try container.decodeIfPresent(Status.self, forKey: .status)
         let rawEctsCredits = try container.decode(String.self, forKey: .ectsCredits)
         guard let ectsCredits = Double(rawEctsCredits) else {
             throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: [CodingKeys.ectsCredits], debugDescription: "Did not find expected double string value"))
         }
         self.ectsCredits = ectsCredits
-        self.note = try container.decode(String.self, forKey: .note)
+        self.name = try container.decode(String.self, forKey: .name)
         self.semester = try container.decodeIfPresent(Semester.self, forKey: .semester)
         let rawTryCount = try container.decode(String.self, forKey: .tryCount)
         guard let tryCount = Int(rawTryCount) else {
