@@ -9,10 +9,10 @@ public enum Semester: Codable {
         let semesterString = try container.decode(String.self)
         let semesterId = String(semesterString.dropFirst(4))
         guard let year = Int(String(semesterString.dropLast())) else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: [nil], debugDescription: "\(semesterString.dropLast()) could not be parsed as an Integer"))
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: [], debugDescription: "\(semesterString.dropLast()) could not be parsed as an Integer"))
         }
         guard year > 1000 else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: [nil], debugDescription: "\(year) does not seem to be a valid year. Expected four digits."))
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: [], debugDescription: "\(year) does not seem to be a valid year. Expected four digits."))
         }
         switch semesterId {
         case "1":
@@ -20,7 +20,7 @@ public enum Semester: Codable {
         case "2":
             self = .winter(year)
         default:
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: [nil], debugDescription: "\(semesterId) is not a valid semester identifier. Expected either '1' or '2'."))
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: [], debugDescription: "\(semesterId) is not a valid semester identifier. Expected either '1' or '2'."))
         }
     }
 
