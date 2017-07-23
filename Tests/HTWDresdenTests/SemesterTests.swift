@@ -38,7 +38,17 @@ class SemesterTests: XCTestCase {
         }
     }
 
+    func testCurrent() {
+        // TODO: Figure out a sensible way of testing this.
+        guard let current = Semester.current else {
+            XCTFail("Semester.current should return a value.")
+            return
+        }
+        print(current)
+    }
+
     static var allTests = [
-        ("testDeserialization", testDeserialization)
+        ("testDeserialization", testDeserialization),
+        ("testCurrent", testCurrent)
     ]
 }

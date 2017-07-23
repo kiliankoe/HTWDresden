@@ -33,6 +33,19 @@ public enum Semester: Codable {
             try container.encode("\(year)2")
         }
     }
+
+    public static var current: Semester? {
+        let components = Calendar(identifier: .gregorian).dateComponents([.year, .month], from: Date())
+        guard let month = components.month, let year = components.year else { return nil }
+        switch month {
+        case 0...2:
+            return .winter(year - 1)
+        case 3...8:
+            return .summer(year)
+        default:
+            return .winter(year)
+        }
+    }
 }
 
 extension Semester: CustomStringConvertible {
